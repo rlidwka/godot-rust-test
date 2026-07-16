@@ -1,0 +1,14 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+reloadable = true
+
+[libraries]
+linux.debug.x86_64 =     "res://rust/target/debug/libgodottest.so"
+linux.release.x86_64 =   "res://rust/target/release/libgodottest.so"
+windows.debug.x86_64 =   "res://rust/target/debug/godottest.dll"
+windows.release.x86_64 = "res://rust/target/release/godottest.dll"
+macos.debug =            "res://rust/target/debug/libgodottest.dylib"
+macos.release =          "res://rust/target/release/libgodottest.dylib"
+macos.debug.arm64 =      "res://rust/target/debug/libgodottest.dylib"
+macos.release.arm64 =    "res://rust/target/release/libgodottest.dylib"

@@ -1,0 +1,53 @@
+name: Release
+
+on:
+    - push
+
+env:
+    CARGO_TERM_COLOR: always
+    CARGO_INCREMENTAL: 0
+    CARGO_PROFILE_TEST_DEBUG: 0
+    CARGO_PROFILE_DEV_DEBUG: 0
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                os: [windows-latest, ubuntu-latest, macos-latest]
+            fail-fast: true
+
+        timeout-minutes: 30
+        runs-on: ${{ matrix.os }}
+
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Install Rust toolchain
+            uses: dtolnay/rust-toolchain@stable
+
+          - name: Setup Rust cache
+            uses: actions/cache@v4
+            with:
+                path: |
+                    ~/.cargo/bin/
+                    ~/.cargo/registry/index/
+                    ~/.cargo/registry/cache/
+                    ~/.cargo/git/db/
+                    target/
+                key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.toml') }}
+
+          - name: Compile binary
+            env:
+                RUSTFLAGS: "-C strip=symbols"
+            run: |
+                cargo build --release --no-default-features
+                ls -la target/release/
+
+        #   - name: Upload artifact
+        #     uses: actions/upload-artifact@v4
+        #     with:
+        #         name: ${{ runner.os }}
+        #         path: |
+        #             target/release/*
+        #         retention-days: 1
