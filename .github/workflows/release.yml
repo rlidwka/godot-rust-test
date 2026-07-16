@@ -13,8 +13,17 @@ jobs:
     build:
         strategy:
             matrix:
-                os: [windows-latest, ubuntu-latest, macos-latest]
-            fail-fast: true
+                include:
+                    - os: windows-latest
+                      artifact_name: windows
+                      artifact_path: rust/target/release/godottest.dll
+                    - os: ubuntu-latest
+                      artifact_name: linux
+                      artifact_path: rust/target/release/libgodottest.so
+                    - os: macos-latest
+                      artifact_name: macos
+                      artifact_path: rust/target/release/libgodottest.dylib
+            # fail-fast: true
 
         timeout-minutes: 30
         runs-on: ${{ matrix.os }}
@@ -42,12 +51,10 @@ jobs:
                 RUSTFLAGS: "-C strip=symbols"
             run: |
                 cd rust && cargo build --release --no-default-features
-                ls -la target/release/
 
-        #   - name: Upload artifact
-        #     uses: actions/upload-artifact@v4
-        #     with:
-        #         name: ${{ runner.os }}
-        #         path: |
-        #             target/release/*
-        #         retention-days: 1
+          - name: Upload artifact
+            uses: actions/upload-artifact@v4
+            with:
+                name: ${{ matrix.artifact_name }}
+                path: ${{ matrix.artifact_path }}
+                retention-days: 1
