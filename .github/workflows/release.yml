@@ -41,7 +41,7 @@ jobs:
             env:
                 RUSTFLAGS: "-C strip=symbols"
             run: |
-                cargo build --release --no-default-features
+                cd rust && cargo build --release --no-default-features
                 ls -la target/release/
 
         #   - name: Upload artifact
