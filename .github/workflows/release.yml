@@ -1,60 +1,60 @@
-name: Release
+# name: Release
 
-on:
-    - push
+# on:
+#     - push
 
-env:
-    CARGO_TERM_COLOR: always
-    CARGO_INCREMENTAL: 0
-    CARGO_PROFILE_TEST_DEBUG: 0
-    CARGO_PROFILE_DEV_DEBUG: 0
+# env:
+#     CARGO_TERM_COLOR: always
+#     CARGO_INCREMENTAL: 0
+#     CARGO_PROFILE_TEST_DEBUG: 0
+#     CARGO_PROFILE_DEV_DEBUG: 0
 
-jobs:
-    build:
-        strategy:
-            matrix:
-                include:
-                    - os: windows-latest
-                      artifact_name: windows
-                      artifact_path: rust/target/release/godottest.dll
-                    - os: ubuntu-latest
-                      artifact_name: linux
-                      artifact_path: rust/target/release/libgodottest.so
-                    - os: macos-latest
-                      artifact_name: macos
-                      artifact_path: rust/target/release/libgodottest.dylib
-            # fail-fast: true
+# jobs:
+#     build:
+#         strategy:
+#             matrix:
+#                 include:
+#                     - os: windows-latest
+#                       artifact_name: windows
+#                       artifact_path: rust/target/release/godottest.dll
+#                     - os: ubuntu-latest
+#                       artifact_name: linux
+#                       artifact_path: rust/target/release/libgodottest.so
+#                     - os: macos-latest
+#                       artifact_name: macos
+#                       artifact_path: rust/target/release/libgodottest.dylib
+#             # fail-fast: true
 
-        timeout-minutes: 30
-        runs-on: ${{ matrix.os }}
+#         timeout-minutes: 30
+#         runs-on: ${{ matrix.os }}
 
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
+#         steps:
+#           - name: Checkout code
+#             uses: actions/checkout@v4
 
-          - name: Install Rust toolchain
-            uses: dtolnay/rust-toolchain@stable
+#           - name: Install Rust toolchain
+#             uses: dtolnay/rust-toolchain@stable
 
-          - name: Setup Rust cache
-            uses: actions/cache@v4
-            with:
-                path: |
-                    ~/.cargo/bin/
-                    ~/.cargo/registry/index/
-                    ~/.cargo/registry/cache/
-                    ~/.cargo/git/db/
-                    target/
-                key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.toml') }}
+#           - name: Setup Rust cache
+#             uses: actions/cache@v4
+#             with:
+#                 path: |
+#                     ~/.cargo/bin/
+#                     ~/.cargo/registry/index/
+#                     ~/.cargo/registry/cache/
+#                     ~/.cargo/git/db/
+#                     target/
+#                 key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.toml') }}
 
-          - name: Compile binary
-            env:
-                RUSTFLAGS: "-C strip=symbols"
-            run: |
-                cd rust && cargo build --release --no-default-features
+#           - name: Compile binary
+#             env:
+#                 RUSTFLAGS: "-C strip=symbols"
+#             run: |
+#                 cd rust && cargo build --release --no-default-features
 
-          - name: Upload artifact
-            uses: actions/upload-artifact@v4
-            with:
-                name: ${{ matrix.artifact_name }}
-                path: ${{ matrix.artifact_path }}
-                retention-days: 1
+#           - name: Upload artifact
+#             uses: actions/upload-artifact@v4
+#             with:
+#                 name: ${{ matrix.artifact_name }}
+#                 path: ${{ matrix.artifact_path }}
+#                 retention-days: 1
