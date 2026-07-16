@@ -42,7 +42,7 @@ jobs:
                 RUSTFLAGS: "-C strip=symbols"
             run: |
                 cd rust && cargo build --release --no-default-features
-                ls -la rust/target/release/
+                ls -la target/release/
 
         #   - name: Upload artifact
         #     uses: actions/upload-artifact@v4
