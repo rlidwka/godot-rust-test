@@ -9,7 +9,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HelloWorldTitle" type="HelloWorldTitle" parent="." unique_id=1035445688]
-test = "Helloewx World"
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
