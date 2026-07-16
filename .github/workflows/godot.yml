@@ -31,4 +31,5 @@ jobs:
 
     - name: check
       run: |
+        ls -la build/*
         ls -la out/*
